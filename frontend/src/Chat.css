@@ -3,7 +3,7 @@
   position: fixed;
     display: flex;
     flex-direction: column;
-    width: 25%;
+    width: 30%;
     height: 80vh;
     background-color: #fff;
     align-items: center;
@@ -14,7 +14,7 @@
   }
 
   .chat-heading{
-    width: 91%;
+    width: 100%;
     background-color: #0074D9;
     margin: 0;
     margin-bottom: 1rem;
@@ -99,7 +99,7 @@
     font-size: 16px;
   }
   
-  .chat-input button {
+  .chat-input .sendbtn {
     background-color: #0074D9; /* Light blue background for the send button */
     color: white; /* White text color for the send button */
     border: none;
@@ -110,6 +110,11 @@
     transition: background-color 0.3s;
   }
   
+  .mic-btn{
+    border: 2px solid black;
+    border-radius: 50%;
+ cursor: pointer;
+  }
   .chat-input button:hover {
     background-color: #303F9F;
   }
