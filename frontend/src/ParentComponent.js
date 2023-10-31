@@ -3,6 +3,7 @@ import Chat from './Chat';
 import Results from './Results';
 import './App.css';
 import './ParentComponent.css';
+import Navbar from './components/Navbar';
 
 function ParentComponent() {
   const [chatHistory, setChatHistory] = useState([]);
@@ -18,6 +19,8 @@ function ParentComponent() {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="parent-container">
       <div className="chat">
         <Chat onChatSubmit={sendChatToAPI} />
@@ -26,6 +29,7 @@ function ParentComponent() {
         <Results results={results} />
       </div>
     </div>
+    </>
   );
 }
 

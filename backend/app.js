@@ -1,11 +1,134 @@
 const express = require('express');
 const app = express();
 const port = 5000;
+require("dotenv").config();
 const cors = require("cors");
+const mongoose=require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const User = require('./models/user');
+
 
 app.use(cors());
 app.use(express.json());
 
+
+mongoose.connect(
+  process.env.MONGO_URI,
+  {
+    useNewUrlParser: true,
+  },
+  (err) => {
+    if (err) {
+    console.log("error in connection");
+    } else {
+    console.log("mongodb is connected");
+    }});
+
+    app.post('/signup', async (req, res) => {
+      const { username, email, password } = req.body;
+      console.log(username);
+      const hashedPassword = await bcrypt.hash(password, 10);
+    
+      try {
+        const user = new User({ username, email, password: hashedPassword });
+        await user.save();
+        res.json({ message: 'User registered successfully' });
+      } catch (error) {
+        res.status(500).json({ error: 'An error occurred' });
+      }
+    });
+
+    app.post('/signin', async (req, res) => {
+      const { email, password } = req.body;
+    
+      const user = await User.findOne({ email });
+    
+      if (!user) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+    
+      if (await bcrypt.compare(password, user.password)) {
+        const token = jwt.sign({ id: user._id },"sushant1234");
+        return res.json({ token });
+      } else {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+    });
+    
+    function authenticateToken(req, res, next) {
+      const authHeader = req.headers['authorization'];
+      const token = authHeader && authHeader.split(' ')[1]; // Extract the token part after "Bearer"
+    
+      if (token == null) {
+        return res.sendStatus(401); // Unauthorized
+      }
+
+      jwt.verify(token, 'sushant1234', (err, user) => {
+        if (err) {
+          return res.sendStatus(403); // Forbidden
+        }
+        req.user = user;
+        next();
+      });
+    }
+    
+    app.post('/add-movie-to-watchlist', authenticateToken, async (req, res) => {
+      try {
+        const { movieid } = req.body;
+        const userId = req.user.id;
+    
+        // Find the user by ID
+        const user = await User.findById(userId);
+    
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+    
+        // Check if the movie already exists in the watchlist
+        const existingMovie = user.watchHistory.find((entry) => entry.movieid === movieid);
+    
+        if (existingMovie) {
+          // If the movie exists, update the timestamp
+          existingMovie.timestamp = new Date();
+        } else {
+          // If the movie doesn't exist, add it to the watchlist
+          user.watchHistory.push({ movieid, timestamp: new Date() });
+        }
+    
+        // Save the updated user document
+        await user.save();
+    
+        res.json({ message: 'Movie added to watchlist successfully' });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred' });
+      }
+    });
+    
+
+    app.get('/user-watchlist', authenticateToken, async (req, res) => {
+      try {
+        const userId = req.user.id;
+    
+        // Find the user by ID
+        const user = await User.findById(userId);
+    
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+    
+        // Retrieve the user's watchlist
+        const watchlist = user.watchHistory;
+    
+        res.json({ watchlist });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred' });
+      }
+    });
+
+    
 const predefinedplaylist=[
   {
     "id":"1",
@@ -410,7 +533,7 @@ app.post('/check-product', (req, res) => {
 
   // Generate some random resulcts data
   const results = movies;
-  console.log(chatHistory.length);
+ 
     const userMessage=chatHistory[chatHistory.length-1].text;
   // Respond with the same user message and the random results
   const response = {
@@ -437,7 +560,7 @@ app.post('/search', (req, res) => {
   const search = req.body.query; // Assuming the message is sent in the request body
 const videoid = req.body.videolink;
 const timestamp = Math.floor(Math.random() * 500) + 1;
-console.log(search,videoid)
+
 const response = {
 timestamp:timestamp
 };
@@ -448,7 +571,7 @@ res.json(response);
 app.post('/get_link', (req, res) => {
  
 const videolink= req.body.videolink;
-console.log(videolink)
+
 const response = {
   link:videolink
   };
