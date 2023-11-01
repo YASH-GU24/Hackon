@@ -27,7 +27,14 @@ mongoose.connect(
 
     app.post('/signup', async (req, res) => {
       const { username, email, password } = req.body;
-      console.log(username);
+    
+      // Check if the email is already registered
+      const existingUser = await User.findOne({ email });
+    
+      if (existingUser) {
+        return res.status(400).json({ error: 'Email is already registered' });
+      }
+    
       const hashedPassword = await bcrypt.hash(password, 10);
     
       try {
@@ -38,6 +45,7 @@ mongoose.connect(
         res.status(500).json({ error: 'An error occurred' });
       }
     });
+    
 
     app.post('/signin', async (req, res) => {
       const { email, password } = req.body;

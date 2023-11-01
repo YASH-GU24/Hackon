@@ -1,51 +1,61 @@
-// src/components/Login.js
-
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import axios from 'axios';
+import './Login.css';
 
 function Login() {
-    const history=useNavigate();
+  const history = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const handleLogin = async () => {
+  const [error, setError] = useState(''); // State for error messages
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/signin', {
         email,
         password,
       });
 
-      // Assuming the API returns a token upon successful login
       const token = response.data.token;
-
-      // Store the token in local storage or a cookie
       localStorage.setItem('token', token);
-
-        history('/Home');
-        } catch (error) {
       
+      history('/Home');
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        setError('Invalid credentials. Please try again.');
+      } else {
+        setError('An error occurred. Please try again later.');
+      }
     }
   }
 
   return (
-    <div>
-      <h2>Login</h2>
-      <input
-        type="text"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogin}>Login</button>
+    <div className='auth-form'>
+      <form>
+        <div className='form-inner'>
+          <h2>Login</h2>
+          <div className='form-group error'>
+            {error && <p className="error-message">{error}</p>}
+          </div>
+          <div className='form-group'>
+            <label htmlFor='email'>Email: </label>
+            <input type="text" name="email" id="email" onChange={(e) => setEmail(e.target.value)} value={email} />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='password'>Password: </label>
+            <input type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)} value={password} />
+          </div>
+          <button onClick={handleLogin} >Login</button>
+          <div className='Signuplink'><Link to='/signup' style={{ textDecoration: 'none',color:"white" }}>Create a new Account</Link></div>
+        </div>
+      
+      </form>
+
+      
     </div>
-  );
+  )
 }
 
 export default Login;

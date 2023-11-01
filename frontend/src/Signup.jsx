@@ -1,17 +1,18 @@
-// src/components/Login.js
-
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import './Login.css';
 
-function Login() {
-    const history=useNavigate();
+function Signup() {
+  const history = useNavigate();
 
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(''); // State for error messages
 
-  const handleLogin = async () => {
+  const handleSignup = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/signup', {
         username,
@@ -21,36 +22,45 @@ function Login() {
 
       console.log(response);
 
-        history('/login');
-        } catch (error) {
-      
+      history('/login');
+    } catch (error) {
+  
+      if (error.response && error.response.status === 500) {
+        setError('An error occurred. Please try again later.');
+      }
+      else if(error.response && error.response.status===400){
+        setError('Email Already Registered');
+      }
+      // Handle other error cases if needed
     }
   }
 
   return (
-    <div>
-      <h2>Signup</h2>
-      <input
-        type="text"
-        placeholder="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogin}>Signup</button>
+    <div className='auth-form'>
+      <form>
+        <div className='form-inner'>
+          <h2>Sign Up</h2>
+          <div className='form-group error'>
+            {error && <p className="error-message">{error}</p>}
+          </div>
+          <div className='form-group'>
+            <label htmlFor='username'>Username: </label>
+            <input type="text" name="username" id="username" onChange={(e) => setUsername(e.target.value)} value={username} />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='email'>Email: </label>
+            <input type="text" name="email" id="email" onChange={(e) => setEmail(e.target.value)} value={email} />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='password'>Password: </label>
+            <input type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)} value={password} />
+          </div>
+          <button onClick={handleSignup}>Sign Up</button>
+          <div className='Signuplink'><Link to='/login' style={{ textDecoration: 'none', color: 'white' }}>Already Have an Account?</Link></div>
+        </div>
+      </form>
     </div>
   );
 }
 
-export default Login;
+export default Signup;
