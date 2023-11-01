@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import MovieCard from './MovieCard';
+import Movie from './Movie';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './MovieDetailspage.css';
 import StarsIcon from '@mui/icons-material/Stars';
 import MovieIcon from '@mui/icons-material/Movie';
 import ShopIcon from '@mui/icons-material/Shop';
+import Navbar from './components/Navbar';
 
 const MovieDetailsPage = () => {
   let { state } = useLocation();
@@ -63,10 +64,40 @@ const MovieDetailsPage = () => {
     }
   };
 
+  const handleAddToWatchlist = async (movieid) => {
+    try {
+      const token = localStorage.getItem('token'); // Get the JWT token from localStorage
+     
+      if (!token) {
+        // Handle not authenticated (redirect to login, show a message, etc.)
+        return;
+      }
+  
+      const response = await axios.post(
+        'http://localhost:5000/add-movie-to-watchlist',
+        { movieid }, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the headers
+          },
+        }
+      );
+  
+      // Handle a successful response (e.g., show a success message)
+      console.log(response.data);
+    } catch (error) {
+      // Handle errors (e.g., show an error message)
+      console.error(error);
+    }
+  };
+  
   const actors = ["Shahrukh Khan" , "Alia Bhatt" , "Abhinav" , "Sushant Dhuria"];
   const genres = ['Action' , 'Horror' , 'Thriller' , 'Comedy' , 'Fiction'];
 
   return (
+    <>
+    <Navbar/>
+  
     <div className="movie-details-page">
       {movieDetails && (
         <div className="movie-details__info">
@@ -87,7 +118,7 @@ const MovieDetailsPage = () => {
                   Cast: {movieDetails.actors?.join(' , ')}
             </div> */}
             <p className="movie-details__description">{movieDetails.description}</p>
-            <button className='movie-details-button watch-button'>
+            <button className='movie-details-button watch-button' onClick={()=>handleAddToWatchlist(movieDetails.id)}>
               <MovieIcon style={{marginRight: '8px'}}/>
               Watch Now
             </button>
@@ -129,7 +160,7 @@ const MovieDetailsPage = () => {
             <div key={movie.id} className="movie">
               <Link to={`/movie/${movie.id}`} state={{ movieId: movie.id }}>
                 <div className='movie-container'>
-                <MovieCard infos={movie} />
+                <Movie infos={movie} />
                 </div>
               </Link>
             </div>
@@ -150,6 +181,7 @@ const MovieDetailsPage = () => {
       </div>
     </div>
   </div>
+  </>
   );
 };
 
@@ -185,7 +217,7 @@ function Playlist({ playlist }) {
             <div key={playlistMovie.id} className="playlist-movie">
               <Link to={`/movie/${playlistMovie.id}`} state={{ movieId: playlistMovie.id }}>
                 <div className='movie-container'>
-                <MovieCard infos={playlistMovie} />
+                <Movie infos={playlistMovie} />
                 </div>
               </Link>
             </div>

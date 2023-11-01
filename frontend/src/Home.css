@@ -1,0 +1,20 @@
+.watch-text{
+    color:white;
+}
+
+
+  .carousel-container .carousel{
+    width: 100%;
+    display: flex;
+  }
+
+  .carousel .movie-container{
+    width: 35%;
+  }
+.carousel-container {
+    display: flex;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    width: 100%; /* Adjust the width as needed */
+  }
+  

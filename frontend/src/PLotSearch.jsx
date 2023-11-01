@@ -4,6 +4,7 @@ import './plotsearch.css';
 import Movie from './Movie';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
+import Navbar from './components/Navbar';
 
 const PLotSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,6 +44,7 @@ const PLotSearch = () => {
 
   return (
     <div>
+  <Navbar/>
       <div className="ploatsearch-main">
         <div className='hero-section'>
           <div className='hero-desc'>
