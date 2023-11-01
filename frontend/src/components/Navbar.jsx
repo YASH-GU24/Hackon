@@ -23,7 +23,7 @@ const Navbar = () => {
           <li><Link to="/chat">Watch Movie</Link></li>
           <li><Link to="/plotsearch">Plot Search</Link></li>
           {/* <li><Link to="/searchTimeStamp">caption Search</Link></li> */}
-          <li>
+          <li className='logout'>
             <Link to="/login" onClick={handleLogout}>
               Logout
             </Link>

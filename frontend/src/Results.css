@@ -9,10 +9,7 @@
   }
   
 
-  .movie-container{
-    width: 35%;
-  }
-
+ 
   .pagination {
     display: flex;
     justify-content: center;

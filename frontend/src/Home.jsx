@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Home.css';
 import Navbar from './components/Navbar';
+import Movie from './Movie.js';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [watchlist, setWatchlist] = useState([]);
+  const [recommendedMovies, setRecommendedMovies] = useState({});
 
   useEffect(() => {
     // Make an API call to get the user's watchlist
@@ -19,7 +22,12 @@ const Home = () => {
         })
         .then((response) => {
           const watchlistData = response.data.watchlist;
-          setWatchlist(watchlistData);
+          const sortedWatchlist = watchlistData.slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+          // Extract the movieid values from the sortedWatchlist
+          const sortedMovieIds = sortedWatchlist.map((item) => item.movieid).slice(0, 4);
+
+          setWatchlist(sortedMovieIds);
         })
         .catch((error) => {
           console.error('Error fetching user watchlist:', error);
@@ -28,39 +36,58 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    // Make another API call using the watchlist data
-    if (watchlist.length > 0) {
-      // You can access the watchlist here and make another API call if needed
-      console.log('Watchlist data:', watchlist);
-      // Make your additional API call here
-      // Example:
-      // axios.get('http://localhost:5000/another-api-endpoint', {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // })
-      // .then((response) => {
-      //   // Process the response from the additional API call
-      // })
-      // .catch((error) => {
-      //   console.error('Error fetching additional data:', error);
-      // });
+    // Make API calls for each movie in the watchlist
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      watchlist.forEach((movieId) => {
+        axios
+          .get(`http://localhost:5000/recommendations/${movieId}`, {})
+          .then((response) => {
+            setRecommendedMovies((prevRecommendedMovies) => ({
+              ...prevRecommendedMovies,
+              [movieId]: response.data.movies,
+            }));
+          })
+          .catch((error) => {
+            console.error(`Error fetching recommended movies for movie ${movieId}:`, error);
+          });
+      });
     }
   }, [watchlist]);
 
   return (
     <div>
-      <Navbar/>
-   
+      <Navbar />
       <div>
-        <h2>Your Watchlist</h2>
-        <ul>
+
           {watchlist.map((item) => (
-            <li key={item.movieid}>{item.movieid}</li>
+            <>
+             <div className='watch-text'> {`Because you Watched ${item}`} </div>
+              <div className='carousel-container'>
+                {recommendedMovies[item] && (
+                  <div className="carousel">
+                    {recommendedMovies[item].map((movie, index) => (
+                      <div key={index} className="movie-container">
+                        <Link
+                          key={movie.id}
+                          to={`/movie/${movie.id}`}
+                          state={{
+                            movieId: movie.id,
+                          }}
+                        >
+                          <Movie infos={movie} />
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
           ))}
-        </ul>
+        </div>
       </div>
-    </div>
+  
   );
 };
 

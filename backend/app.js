@@ -45,7 +45,6 @@ mongoose.connect(
         res.status(500).json({ error: 'An error occurred' });
       }
     });
-    
 
     app.post('/signin', async (req, res) => {
       const { email, password } = req.body;

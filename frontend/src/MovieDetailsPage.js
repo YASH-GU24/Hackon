@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import MovieCard from './MovieCard';
+import Movie from './Movie';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './MovieDetailspage.css';
@@ -160,7 +160,7 @@ const MovieDetailsPage = () => {
             <div key={movie.id} className="movie">
               <Link to={`/movie/${movie.id}`} state={{ movieId: movie.id }}>
                 <div className='movie-container'>
-                <MovieCard infos={movie} />
+                <Movie infos={movie} />
                 </div>
               </Link>
             </div>
@@ -217,7 +217,7 @@ function Playlist({ playlist }) {
             <div key={playlistMovie.id} className="playlist-movie">
               <Link to={`/movie/${playlistMovie.id}`} state={{ movieId: playlistMovie.id }}>
                 <div className='movie-container'>
-                <MovieCard infos={playlistMovie} />
+                <Movie infos={playlistMovie} />
                 </div>
               </Link>
             </div>

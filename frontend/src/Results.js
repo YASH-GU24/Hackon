@@ -24,6 +24,7 @@ const Results = ({ results }) => {
       {moviesToDisplay.map((movie, index) => (
    
         <div key={index} className="movie-container">
+        
             <Link
                 key={movie.id}
                 to={`/movie/${movie.id}`}
