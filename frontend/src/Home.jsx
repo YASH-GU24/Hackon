@@ -12,7 +12,7 @@ const Home = () => {
   useEffect(() => {
     // Make an API call to get the user's watchlist
     const token = localStorage.getItem('token');
-
+  
     if (token) {
       axios
         .get('http://localhost:5000/user-watchlist', {
@@ -23,34 +23,33 @@ const Home = () => {
         .then((response) => {
           const watchlistData = response.data.watchlist;
           const sortedWatchlist = watchlistData.slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-          // Extract the movieid values from the sortedWatchlist
-          const sortedMovieIds = sortedWatchlist.map((item) => item.movieid).slice(0, 4);
-
-          setWatchlist(sortedMovieIds);
+  
+          // Set the watchlist state with movieid and movieTitle
+          setWatchlist(sortedWatchlist);
         })
         .catch((error) => {
           console.error('Error fetching user watchlist:', error);
         });
     }
   }, []);
+  
 
   useEffect(() => {
     // Make API calls for each movie in the watchlist
     const token = localStorage.getItem('token');
 
     if (token) {
-      watchlist.forEach((movieId) => {
+      watchlist.forEach((item) => {
         axios
-          .get(`http://localhost:5000/recommendations/${movieId}`, {})
+          .get(`http://localhost:8000/recommendations/${item.movieid}`, {})
           .then((response) => {
             setRecommendedMovies((prevRecommendedMovies) => ({
               ...prevRecommendedMovies,
-              [movieId]: response.data.movies,
+              [item.movieid]: response.data.movies,
             }));
           })
           .catch((error) => {
-            console.error(`Error fetching recommended movies for movie ${movieId}:`, error);
+            console.error(`Error fetching recommended movies for movie ${item.movieId}:`, error);
           });
       });
     }
@@ -61,30 +60,31 @@ const Home = () => {
       <Navbar />
       <div>
 
-          {watchlist.map((item) => (
-            <>
-             <div className='watch-text'> {`Because you Watched ${item}`} </div>
-              <div className='carousel-container'>
-                {recommendedMovies[item] && (
-                  <div className="carousel">
-                    {recommendedMovies[item].map((movie, index) => (
-                      <div key={index} className="movie-container">
-                        <Link
-                          key={movie.id}
-                          to={`/movie/${movie.id}`}
-                          state={{
-                            movieId: movie.id,
-                          }}
-                        >
-                          <Movie infos={movie} />
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </>
+      {watchlist.map((item) => (
+  <>
+    <div className='watch-text'>{`Because you Watched ${item.movieTitle}`}</div>
+    <div className='carousel-container'>
+      {recommendedMovies[item.movieid] && (
+        <div className="carousel">
+          {recommendedMovies[item.movieid].map((movie, index) => (
+            <div key={index} className="movie-carousel">
+              <Link
+                key={movie.id}
+                to={`/movie/${movie.id}`}
+                state={{
+                  movieId: movie.id,
+                }}
+              >
+                <Movie infos={movie} />
+              </Link>
+            </div>
           ))}
+        </div>
+      )}
+    </div>
+  </>
+))}
+
         </div>
       </div>
   

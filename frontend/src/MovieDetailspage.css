@@ -1,9 +1,23 @@
-.recommended-movies-container{
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    justify-content: space-between;
+.recommended-movies-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  gap: 16px;
+  -webkit-scrollbar-width: none; /* Hide scrollbar on webkit browsers */
 }
+
+.recommended-movies-container::-webkit-scrollbar {
+  width: 0; /* Hide horizontal scrollbar on webkit browsers */
+  height: 0; /* Hide vertical scrollbar on webkit browsers */
+}
+
+.recommended-movies-container .movie-carousel {
+  flex: 0 0 calc(24% - 16px);
+  max-width: 24%;
+}
+
+
 .movie{
     width: 30%;
 }

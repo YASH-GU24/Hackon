@@ -24,7 +24,7 @@ const MovieDetailsPage = () => {
   useEffect(() => {
     // Fetch movie details using Axios based on the movieId
     axios
-      .get(`http://localhost:5000/movies/${movieId}`)
+      .get(`http://localhost:8000/movies/${movieId}`)
       .then((response) => {
         console.log(response.data)
         setMovieDetails(response.data)
@@ -33,7 +33,7 @@ const MovieDetailsPage = () => {
 
     // Fetch recommended movies based on the movieId
     axios
-      .get(`http://localhost:5000/recommendations/${movieId}`)
+      .get(`http://localhost:8000/recommendations/${movieId}`)
       .then((response) => {
         const recommendedMoviesData = response.data.movies;
         setRecommendedMovies(recommendedMoviesData);
@@ -42,7 +42,7 @@ const MovieDetailsPage = () => {
 
     // Fetch playlists based on the movieId
     axios
-      .get(`http://localhost:5000/playlist/${movieId}`)
+      .get(`http://localhost:8000/playlist/${movieId}`)
       .then((response) => {
         const playlistsData = response.data.playlists;
         setPlaylists(playlistsData);
@@ -64,7 +64,7 @@ const MovieDetailsPage = () => {
     }
   };
 
-  const handleAddToWatchlist = async (movieid) => {
+  const handleAddToWatchlist = async (movieid,movieTitle) => {
     try {
       const token = localStorage.getItem('token'); // Get the JWT token from localStorage
      
@@ -75,7 +75,7 @@ const MovieDetailsPage = () => {
   
       const response = await axios.post(
         'http://localhost:5000/add-movie-to-watchlist',
-        { movieid }, 
+        { movieid,movieTitle }, 
         {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the headers
@@ -109,16 +109,16 @@ const MovieDetailsPage = () => {
               <span>{movieDetails.rating}</span>
             </div>
             <p className="movie-details__director">Directed by:  {movieDetails.director}</p>
-            {/* <div className='movie-details__genres'>
+            <div className='movie-details__genres'>
                   {movieDetails.genres?.map((genre) => {
                     return <span>{genre}</span>;
                   })}
             </div>
             <div className='movie-details__cast'>
                   Cast: {movieDetails.actors?.join(' , ')}
-            </div> */}
+            </div>
             <p className="movie-details__description">{movieDetails.description}</p>
-            <button className='movie-details-button watch-button' onClick={()=>handleAddToWatchlist(movieDetails.id)}>
+            <button className='movie-details-button watch-button' onClick={()=>handleAddToWatchlist(movieDetails.movie_id,movieDetails.title)}>
               <MovieIcon style={{marginRight: '8px'}}/>
               Watch Now
             </button>

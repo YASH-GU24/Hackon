@@ -99,16 +99,18 @@ def fetch_results(resp):
     print(resp)
     near_text = []
     if resp["Genres"]!=[] and resp["Genres"][0]!='':
-        where_operands.append(generate_or_text('genres',resp['Genres']))
+        near_text = near_text + resp["Genres"]
+    #     where_operands.append(generate_or_text('genres',resp['Genres']))
     if resp["actors"]!=[] and resp["actors"][0]!='':
-        near_text = near_text+resp['actors']
         where_operands.append(generate_or_text('actors',resp['actors']))
     if resp["Director"]!=[] and resp["Director"][0]!='':
-        near_text = near_text+resp['Director']
         # resp['chat_summary'] = resp['chat_summary']+' '.join(resp["Director"])
         where_operands.append(generate_or_string('director',resp['Director']))
     if resp["keywords"]!=[] and resp["keywords"][0]!='':
-        where_operands.append(generate_or_text('keywords',resp["keywords"]))
+        near_text = near_text + resp["keywords"]
+    #     where_operands.append(generate_or_text('keywords',resp["keywords"]))
+    if resp["suggested_movie_titles"]!=[] and resp["suggested_movie_titles"][0]!='':
+        near_text = near_text + resp["suggested_movie_titles"]
     if len(where_operands)==0:
         where_filter={}
     elif len(where_operands)==1:
@@ -152,7 +154,7 @@ def fetch_results(resp):
 def get_movie_by_id(id):
     response = (
             client.query
-            .get("Movies", ["movie_id","title","description","poster_link","actors","duration","date_published","director","rating_value","rating_count"])
+            .get("Movies", ["movie_id","title","genres","description","poster_link","actors","duration","date_published","director","rating_value","rating_count"])
             .with_where({"path":"movie_id","operator":"Equal","valueNumber":int(id)})
             .with_additional(["distance"])
             .do()

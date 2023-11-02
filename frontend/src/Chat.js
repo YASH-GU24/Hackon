@@ -49,7 +49,7 @@ const Chat = ({ onChatSubmit }) => {
   }
 
   const callAPI = (chatHistory, userMessage) => {
-    fetch('http://localhost:5000/check-product', {
+    fetch('http://localhost:8000/check-product', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

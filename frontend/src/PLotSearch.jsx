@@ -19,7 +19,7 @@ const PLotSearch = () => {
 
   const handleSearch = async () => {
     // Perform the search and fetch data
-    fetch('http://localhost:5000/check-plot', {
+    fetch('http://localhost:8000/check-plot', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

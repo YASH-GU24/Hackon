@@ -13,17 +13,12 @@ app.use(cors());
 app.use(express.json());
 
 
-mongoose.connect(
-  process.env.MONGO_URI,
-  {
-    useNewUrlParser: true,
-  },
-  (err) => {
-    if (err) {
-    console.log("error in connection");
-    } else {
-    console.log("mongodb is connected");
-    }});
+const connectToMongo = async () => {
+  await mongoose.connect(process.env.MONGO_URI);
+  console.log("Connected to MongoDB");
+};
+
+connectToMongo();
 
     app.post('/signup', async (req, res) => {
       const { username, email, password } = req.body;
@@ -82,7 +77,7 @@ mongoose.connect(
     
     app.post('/add-movie-to-watchlist', authenticateToken, async (req, res) => {
       try {
-        const { movieid } = req.body;
+        const { movieid,movieTitle } = req.body;
         const userId = req.user.id;
     
         // Find the user by ID
@@ -100,7 +95,7 @@ mongoose.connect(
           existingMovie.timestamp = new Date();
         } else {
           // If the movie doesn't exist, add it to the watchlist
-          user.watchHistory.push({ movieid, timestamp: new Date() });
+          user.watchHistory.push({ movieid, movieTitle,timestamp: new Date() });
         }
     
         // Save the updated user document

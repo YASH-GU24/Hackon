@@ -10,7 +10,7 @@ const MoviePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/playlists');
+        const response = await axios.get('http://localhost:8000/playlists');
         const playlists = response.data;
         console.log(response.data);
 

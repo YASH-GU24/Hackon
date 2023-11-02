@@ -7,7 +7,11 @@ const userSchema = new mongoose.Schema({
   password: String,
   watchHistory: [
     {
-      movieid: String, // Add the movie name here
+      movieid: {
+        type: String,
+        unique: true // `id` must be unique
+      },
+      movieTitle: String,
       timestamp: Date,
     },
   ],

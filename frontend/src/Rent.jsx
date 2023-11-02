@@ -7,7 +7,7 @@ const Rent = () => {
 
   useEffect(() => {
     // Fetch movie data from the API
-    fetch('http://localhost:5000/rent-movies') // Update the URL accordingly
+    fetch('http://localhost:8000/rent-movies') // Update the URL accordingly
       .then((response) => response.json())
       .then((data) => setMovies(data))
       .catch((error) => console.error('Error fetching data:', error));

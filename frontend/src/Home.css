@@ -3,18 +3,34 @@
 }
 
 
-  .carousel-container .carousel{
-    width: 100%;
-    display: flex;
-  }
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  gap: 16px;
+  -webkit-scrollbar-width: none; /* Hide scrollbar on webkit browsers */
+  margin-left: 32px;
+}
 
-  .carousel .movie-container{
-    width: 35%;
-  }
-.carousel-container {
-    display: flex;
-    overflow-x: scroll;
-    scroll-behavior: smooth;
-    width: 100%; /* Adjust the width as needed */
-  }
-  
+.carousel::-webkit-scrollbar {
+  width: 0; /* Hide horizontal scrollbar on webkit browsers */
+  height: 0; /* Hide vertical scrollbar on webkit browsers */
+}
+
+.carousel .movie-carousel {
+  flex: 0 0 calc(24% - 16px);
+  max-width: 24%;
+}
+
+.watch-text {
+  color: #fff;
+  font-weight: 600;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.watch-text{
+  font-size: 2.5rem;
+  margin: 32px 16px 16px 32px;
+}
