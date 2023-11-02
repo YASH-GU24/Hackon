@@ -93,6 +93,7 @@
   .movie-details__title{
     font-size: 4rem;
     margin: 0;
+    text-transform: capitalize;
   }
 
   .movie-details__rating{

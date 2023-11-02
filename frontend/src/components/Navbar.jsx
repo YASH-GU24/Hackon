@@ -15,13 +15,13 @@ const Navbar = () => {
     <nav className="navbar">
       <div className='left'>
         <ul>
-          <li><Link to="/home">Prime Video</Link></li>
+          <li><Link to="/home">Fire Tv</Link></li>
         </ul>
       </div>
       <div className='right'>
         <ul>
           <li><Link to="/chat">Watch Movie</Link></li>
-          <li><Link to="/plotsearch">Plot Search</Link></li>
+          {/* <li><Link to="/plotsearch">Plot Search</Link></li> */}
           {/* <li><Link to="/searchTimeStamp">caption Search</Link></li> */}
           <li className='logout'>
             <Link to="/login" onClick={handleLogout}>

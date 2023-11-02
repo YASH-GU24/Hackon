@@ -12,9 +12,10 @@
  
   .pagination {
     display: flex;
+    width: 70%;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    margin: auto;
     padding: 10px 0;
     flex-wrap: wrap; /* Allow buttons to wrap to the next line */
     clear: both; /* Ensure the buttons are below the movie cards */

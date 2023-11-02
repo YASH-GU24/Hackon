@@ -38,7 +38,7 @@ const Movie = ({ infos }) => {
           <h2 className='movie__title'>{infos.title}</h2>
           <div className='movie__infos'>
             <MovieInfo  name='duration' icon={<TimelapseIcon/>} value={`${infos.duration} mins`} />
-            <Rating icon={<StarRateIcon/>} rating={infos.rating} />
+            <Rating icon={<StarRateIcon/>} rating={infos.rating_value} />
           </div>
         </div>
       </div>

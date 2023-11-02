@@ -90,9 +90,6 @@ const MovieDetailsPage = () => {
       console.error(error);
     }
   };
-  
-  const actors = ["Shahrukh Khan" , "Alia Bhatt" , "Abhinav" , "Sushant Dhuria"];
-  const genres = ['Action' , 'Horror' , 'Thriller' , 'Comedy' , 'Fiction'];
 
   return (
     <>
@@ -118,10 +115,10 @@ const MovieDetailsPage = () => {
                   Cast: {movieDetails.actors?.join(' , ')}
             </div>
             <p className="movie-details__description">{movieDetails.description}</p>
-            <button className='movie-details-button watch-button' onClick={()=>handleAddToWatchlist(movieDetails.movie_id,movieDetails.title)}>
-              <MovieIcon style={{marginRight: '8px'}}/>
+            <a href={movieDetails.url} target='_blank' className='movie-details-button watch-button' onClick={()=>handleAddToWatchlist(movieDetails.movie_id,movieDetails.title)}>
+              <MovieIcon style={{marginRight: '8px'} }/>
               Watch Now
-            </button>
+            </a>
             {/* {movieDetails.rentPrice && (
               <button className="rent-button">
                 Rent for ${movieDetails.rentPrice}

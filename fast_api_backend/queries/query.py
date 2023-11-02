@@ -154,7 +154,7 @@ def fetch_results(resp):
 def get_movie_by_id(id):
     response = (
             client.query
-            .get("Movies", ["movie_id","title","genres","description","poster_link","actors","duration","date_published","director","rating_value","rating_count"])
+            .get("Movies", ["movie_id","url","title","genres","description","poster_link","actors","duration","date_published","director","rating_value","rating_count"])
             .with_where({"path":"movie_id","operator":"Equal","valueNumber":int(id)})
             .with_additional(["distance"])
             .do()

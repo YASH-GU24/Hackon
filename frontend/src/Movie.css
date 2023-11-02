@@ -7,8 +7,8 @@
 }
 
 .movie-card {
-  width: 100%;
-  height: 100%;
+  width: 270px;
+  height: 400px;
   position: relative;
   overflow: hidden;
   padding: 0 !important;
@@ -60,6 +60,7 @@
   margin-bottom: 8px;
   font-weight: 600;
   font-size: 1.2rem;
+  text-transform: capitalize;
 }
 
 .movie__infos{

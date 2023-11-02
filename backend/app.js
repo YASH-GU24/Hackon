@@ -89,7 +89,7 @@ connectToMongo();
     
         // Check if the movie already exists in the watchlist
         const existingMovie = user.watchHistory.find((entry) => entry.movieid === movieid);
-    
+    console.log(existingMovie);
         if (existingMovie) {
           // If the movie exists, update the timestamp
           existingMovie.timestamp = new Date();
